@@ -18,3 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+// Derivo cualquier ruta a para que resuelva router-vue.
+// Esta línea siempre al final
+Route::get('{path}', 'HomeController@index')->where('path', '([A-z\d-\/_.]+)?');
