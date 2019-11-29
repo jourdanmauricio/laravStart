@@ -147,6 +147,19 @@
                   </div>
 
                   <div class="form-group">
+                    <label for="options" class="col-sm-3 control-label">País</label>
+                    <div class="col-sm-4">
+                      <select v-model="selected" id="options" class="form-control">
+                        <option :value="null">Seleccione un país</option>
+                        <option
+                          v-for="opcion in options"
+                          :key="opcion.id_site"
+                          :value="opcion.id_site"
+                        >{{ opcion.name }}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
                     <label
                       for="password"
                       class="col-sm-12 control-label"
@@ -191,7 +204,10 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import mlUpdateUserMixin from "../components/mercadoLibre/mixins/mlUpdateUserMixin";
 export default {
+  mixins: [mlUpdateUserMixin],
   data() {
     return {
       form: new Form({
@@ -202,10 +218,17 @@ export default {
         password: "",
         type: "",
         bio: "",
-        photo: ""
-      })
+        photo: "",
+        country: ""
+      }),
+      options: [],
+      selected: null
     };
   },
+  computed: {
+    ...mapState(["accessToken"])
+  },
+
   methods: {
     getProfilePhoto() {
       let photo =
@@ -215,6 +238,8 @@ export default {
       return photo;
     },
     updateInfo() {
+      // Actualizo la BD con datos del form
+      this.form.country = this.selected;
       this.$Progress.start();
       if (this.form.password == "") {
         this.form.password = undefined;
@@ -228,6 +253,16 @@ export default {
         .catch(() => {
           this.$Progress.fail();
         });
+      // Obtengo el usuario de mercado libre desde Mixin
+      const id = this.getUserMl();
+      //      console.log("profile. User_id: " + id);
+      // console.log(this.accessToken);
+
+      // TODO:
+      // Si existe el nick:
+      // Leo mi perfil en ML, lo guardo en BD y lo muestro en profile
+      // Get a publicaciones de Mercado Libre y las guardo en la BD
+      // Invocar la actualizacion del usuario (mixin)
     },
     updateProfile(e) {
       let file = e.target.files[0];
@@ -251,7 +286,24 @@ export default {
     }
   },
   created() {
-    axios.get("api/profile").then(({ data }) => this.form.fill(data));
+    axios
+      .get("api/sites")
+      .then(response => {
+        this.options = response.data;
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    axios
+      .get("api/profile")
+      .then(({ data }) => {
+        this.form.fill(data);
+        this.selected = data.country;
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   },
   mounted() {
     console.log("Component mounted.");

@@ -18,12 +18,12 @@
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>User ML</th>
-                  <th>Email</th>
-                  <th>Type</th>
-                  <th>Registered At</th>
+                  <th @click="sort('id')">ID</th>
+                  <th @click="sort('name')">Name</th>
+                  <th @click="sort('user_ml')">User ML</th>
+                  <th @click="sort('email')">Email</th>
+                  <th @click="sort('type')">Type</th>
+                  <th @click="sort('created_at')">Registered At</th>
                   <th>Modify</th>
                 </tr>
               </thead>
@@ -172,6 +172,8 @@
 export default {
   data() {
     return {
+      currentSort: "id",
+      currentSortDir: "asc",
       editmode: false,
       users: {},
       form: new Form({
@@ -186,13 +188,25 @@ export default {
       })
     };
   },
-  methods: {
-    getResults(page = 1) {
-      axios.get("api/user?page=" + page).then(response => {
-        this.users = response.data;
+  computed: {
+    sortedCats: function() {
+      return this.cats.sort((a, b) => {
+        let modifier = 1;
+        if (this.currentSortDir === "desc") modifier = -1;
+        if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+        if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+        return 0;
       });
+    }
+  },
+  methods: {
+    sort: function(s) {
+      //if s == current sort, reverse
+      if (s === this.currentSort) {
+        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
+      }
+      this.currentSort = s;
     },
-
     getResults(page = 1) {
       axios.get("api/user?page=" + page).then(response => {
         this.users = response.data;
@@ -256,7 +270,7 @@ export default {
     createUser() {
       this.$Progress.start();
       this.form
-        .post("api/user")
+        .post("api/mlusers")
         .then(() => {
           Fire.$emit("AfterCreate");
           $("#addNew").modal("hide");
@@ -281,8 +295,8 @@ export default {
       console.log(query);
       axios
         .get("api/findUser?q=" + query)
-        .then(response => {
-          this.users = response.data;
+        .then(data => {
+          this.users = data.data;
         })
         .catch(() => {});
     });

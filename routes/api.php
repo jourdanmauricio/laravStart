@@ -18,7 +18,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResources(['user' => 'API\UserController']);
+Route::apiResources(['sites' => 'API\SiteController']);
+Route::apiResources(['mltokens' => 'API\MlTokenController']);
+Route::apiResources(['mlusers' => 'API\MlUserController']);
 
 Route::get('profile', 'API\UserController@profile');
 Route::get('findUser', 'API\UserController@search');
+Route::get('findToken', 'API\MlTokenController@search');
+Route::get('accesstoken', 'API\MlTokenController@accesstoken');
 Route::put('profile', 'API\UserController@updateProfile');

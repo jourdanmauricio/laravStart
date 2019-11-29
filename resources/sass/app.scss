@@ -8,6 +8,7 @@ $fa-font-path: "../webfonts";
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 @import '~admin-lte/dist/css/adminlte.css';
+@import '~datatables/media/css/jquery.dataTables.min.css';
 
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
@@ -19,6 +20,7 @@ $fa-font-path: "../webfonts";
 }
 
 .router-link-active {
-    background-color: #3f51b5;
+    // background-color: #3f51b5;
+    background-color: rgba(0, 0, 0, 0.04);
     color: #fff important;
 }

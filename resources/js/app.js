@@ -8,9 +8,10 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+// import "./components/mercadoLibre/mixins/mlUpdateUserMixin";
 import { Form, HasError, AlertError } from 'vform';
 import moment from 'moment';
-
+import { store } from './store/store';
 import Gate from './Gate';
 Vue.prototype.$gate = new Gate(window.user);
 
@@ -45,10 +46,35 @@ Vue.use(VueProgressBar, {
 Vue.use(VueRouter);
 
 let routes = [
+    { path: '/home', component: require('./components/Home.vue').default },
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
-    { path: '/mercadoLibre', component: require('./components/MercadoLibre.vue').default },
+    //   { path: '/mercadoLibre', component: require('./components/MercadoLibre.vue').default },
+    {
+        path: '/mercadolibre',
+        component: require('./components/mercadoLibre/MLMain.vue').default,
+        meta: {
+            requieresAuth: true
+        },
+        children: [
+            {
+                path: '/',
+                component: require('./components/mercadoLibre/MLVentas.vue').default
+            },
+            {
+                path: 'ventas',
+                component: require('./components/mercadoLibre/MLVentas.vue').default
+            },
+            {
+                path: 'Publicaciones',
+                component: require('./components/mercadoLibre/MLPublicaciones.vue').default
+            }
+
+        ]
+    },
     { path: '/developer', component: require('./components/Developer.vue').default },
     { path: '/users', component: require('./components/Users.vue').default },
+    { path: '/access_token', component: require('./components/mercadoLibre/MLAccessToken.vue').default },
+    { path: '/mlusers', component: require('./components/mercadoLibre/MlUsers.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '*', component: require('./components/NotFound.vue').default }
 
@@ -112,6 +138,7 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 
 const app = new Vue({
     el: '#app',
+    store,
     router,
     data: {
         search: ""

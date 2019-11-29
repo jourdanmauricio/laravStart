@@ -9,6 +9,7 @@
   <!-- Font Awesome -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
 <link rel="stylesheet" href="/css/app.css">
+<link rel="stylesheet" href="/fonts/vendor/icomoon/style.css">
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper" id="app">
@@ -66,17 +67,17 @@
                with font-awesome or any other icon font library -->
 
           <li class="nav-item">
-            <router-link to="/dashboard" class="nav-link">
+            <router-link to="/home" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt blue" ></i>
                 <p>
-                Dashboard
+                Home
                 </p>
             </router-link>
           </li>
 
           <li class="nav-item">
             <router-link to="/mercadoLibre" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt blue" ></i>
+              <i class="nav-icon icon-ML yellow" ></i>
                 <p>
                 Mercado Libre
                 </p>
@@ -100,6 +101,24 @@
                 </router-link>
               </li>
             </ul>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/mlusers" class="nav-link">
+                  <i class="fas fa-users nav-icon"></i>
+                  <p>ML Users</p>
+                </router-link>
+              </li>
+            </ul>
+
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/access_token" class="nav-link">
+                  <i class="fas fa-redo nav-icon"></i>
+                  <p>ML Access Token</p>
+                </router-link>
+              </li>
+            </ul>
+
           </li>
 
           <li class="nav-item">
